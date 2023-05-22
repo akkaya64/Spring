@@ -1,0 +1,186 @@
+
+SPRING
+Spring kurumsal uygulamalar geliştirmek için kullanılan en popüler frameworklerden birisidir.
+Bağımlılık enjeksiyonu tasarım kalıbı üzerine oturtulmuş “Spring framework” çekirdek yapısı bize birbirinden bağımsız
+sistemler inşa etmemizi sağlar.
+
+Loose coupling için Dependency Injection mekanizmasını kullanır
+
+INVERSION OF CONTROL
+● Programlama prensibidir
+● IOC kontrolü developerdan Frameworke alır...
+● “New” leme tarzı işlemler bellek yönetimi açışından maliyetli olduğu için obje üretiminin şeklini değiştirir
+
+Spring Bean Nedir?
+1) Bean Nedir ? : basit Java Objeleridir.
+1) Spring Container, Java objeleri ürettiği zaman onları “Spring Beans” diye adlandırır.
+1) Spring Beans’ler normal Java Class’lardan üretilir.
+
+Configuring Spring Container
+● XML Based (eskidir ve yapılandırması zordur )
+● Annotation Based (Spring 2.5)
+  ○ XML configurasyonları minimum düzeyde kullanılır ama “component scan” yapısı xml ile yazılır
+● Code Based (Spring 3.2)
+  ○ java configuration class kullanır
+  ○ bütün konfigürasyonlar kod içinde yapılır
+
+Spring Annotations
+Temel Fonksiyonları
+● Objeleri üretmek ve yönetmek (Inversion of control (IoC))
+● Bağımlılıkları Objeye enjekte etmek (Dependency Injection (DI))
+
+● @Configuration --> Konfigürasyon için kullanılır
+● @Component
+● @Bean
+● @ComponentScan --> Component leri taramaya başlar
+● @Autowired --> Bağımlılık Enjekte etmek için kullanılır
+● @Qualifier --> Seçim yapıcıdır
+
+Örnek Proje
+Adım 1: Java Class oluştur ve @Configuration ekle
+Adım 2: component scanning için @ComponentScan ekle Bunu yazmazsanız proje içindeki dosyaları otomatik tarar
+Adım 3 :Classlara @Component annotation ekle Adım 4: Spring Java configuration class’ını oku Adım 5:Spring Container
+        dan bean talep et
+
+Injection Tipleri
+1) Constructor injection
+2) Setter Injection
+3) Field Injection
+
+Bean Scopes
+1) Scope : bean ın yaşam döngüsü
+2) Tanımladığı alanlar :
+    ○ Ne kadar yaşayacak ??
+    ○ Kaç tane instance üretilecek ??
+    ○ Nasıl paylaşılacak ??
+
+Bean Scopes (Singleton)
+1) Bütün beanler default olarak singleton üretilir
+2) Spring IoC Container her beanden sadece 1 tane instance oluşturur.
+3) Beans’ler memory de tutulur
+
+MessageService service1= context.getBean("mailService",MessageService.class);
+                                                                                    Aynı Obje
+MessageService service2= context.getBean("mailService",MessageService.class);
+
+@Component
+@Scope("singleton") //default scope
+public class MailService implements MessageService {
+}
+
+Her istekte yeni obje üretilir.
+@Component @Scope("prototype")
+public class MailService implements MessageService { }
+MessageService service1= context.getBean("mailService",MessageService.class); Reference1
+MessageService service2= Reference2 context.getBean("mailService",MessageService.class);
+
+
+Spring MVC
+● Java ile web uygulamaları yapmak için bir Framework’dür
+● Model-View-Controller design pattern üzerine inşa edilmiştir
+● Dynamic Web Application oluşturulabilir
+● RESTFUL service üretmek için kullanılabilir
+● Core Spring Framework(IoC, DI) ün getirdiğin kolaylığı sağlar
+
+M-V-C
+USER
+--> CONTROLLER ( C ) -> manipulates
+--> MODEL ( M ) -> updates
+-->VIEW ( V ) -> sees
+USER
+
+Spring MVC Configurations
+● Spring MVC supports 2 farklı konfigürasyonu destekliyor
+    • XML Based Configuration
+    • Java Based Configuration
+
+Önemli Annotation’lar
+● @Contoller and @RestController
+● @RequestMapping
+● @GetMapping, @PostMapping
+● @PutMapping, @DeleteMapping
+● @RequestParam,@PathVariable
+● @RequestBody
+● @ResponseBody
+
+WebServer - Servlet
+
+                         Web-Server (Tomcat Server)••••••••••••••••••••••••••••••••••••••
+                         |                                                              |
+                         |                   | Servlet Container••••••••••••••••••••    |
+                         |                   |                                     |    |
+                         |                   |               |•••••••••••••••|     |    |
+       | -> Request      |  -> Request       | -> Request    |               |     |    |
+Client |                 |                   |               | Servlet Class |     |    |
+       | <- Response     |  <- Response      | <- Response   |               |     |    |
+                         |                   |               |•••••••••••••••|     |    |
+                         ••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••••
+
+
+
+                                       | 2} --> Handler Mapping
+
+ Request 1} -->   Dispatcher Servlet   | 3} -------------> Controller
+                                       | 4} <--ModelAndView
+
+                                       | 5} --> ViewResolver
+
+                                       | 6} --> View
+
+
+Spring MVC - URL
+● HTTP URL
+    ● http://serverAddress:portNumber/resourcePath?queryString
+      https://127.0.0.1:8080/customer?id=1
+      | 1  | |   2     | 3  |   4    | 5|
+
+1 Port number
+2 Query param
+3 protocol
+4 server address
+5 Resource path
+
+
+Layer Architecture
+             _________________________________________________________________
+             |            | requests-> |         | requests -> |             |
+ CLIENT      | Controller |            | Service |             | Repository  |      DB
+             |            | <-response |         | <-response  |             |
+             -----------------------------------------------------------------
+
+
+
+REST nedir ??
+● Stateless
+● Server tarafındaki kaynaklara URI ile ulaşılır
+    https://127.0.0.1:8080/customer?id=1
+● Session yoktur, bilgi taşınmaz
+● HTTP protokollerini kullanır
+● CRUD operasyonları için ,HTTP methodları kullanılır; get, post, put and delete
+● Response olarak bilinen formatlar kullanılır JSON veya XML, vb.
+
+
+REST API IN ACTION
+
+  REST clients                            REST API                                    REST server
+-------------------------------------------------------------------------------------------------------
+| Computer     |  ----> REST request: HTTP method (GET, POST, PUT, DELETE) + URI | resource HTML      |
+| CellPhone    |                                                                 | resource pictures  |
+| Tablet esc.  |  <---    Rest response: (Resource representation in XML/JSON)   | resource news exc. |
+-----------------------------------------------------------
+
+
+
+MVC Aslinda bir dizayn pattern dir
+M MODEL data, entity, class
+V VIEW kullanicinin ekranda gordugu backenden gelen datalar
+C CONTROLLER backenden gelen code larin client in gorebilecegi hale getirmeye denir
+
+
+Sipringin maliyetinin dusuk olmasinin asil sebebi bizim @Companent ile belirtmis oldugumuz
+class dan uygulama boyunca sadece bir tanre bean olusturulur.
+
+Oblenin olusturulmasi, kullanilmasi gabarage collector e gonderilmesi tamamen String in vazifesi
+developer tamamen logig e odaklanmasini sagliyor.
+
+Boiler plate tekrarlanarak kullananilan kodlara denir. codlamada tekrar iyi degildir
